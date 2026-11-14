@@ -1,0 +1,237 @@
+{
+  "groups": [
+    {
+      "id": "interfaces",
+      "title": "Frontend & mobile",
+      "intro": "Interfaces and the application workflows they bring into view.",
+      "example": "StaySchool & NovaCore",
+      "exampleUrl": "/work/",
+      "tools": [
+        [
+          "JavaScript",
+          "js"
+        ],
+        [
+          "TypeScript",
+          "typescript"
+        ],
+        [
+          "Angular",
+          "angular"
+        ],
+        [
+          "React",
+          "react"
+        ],
+        [
+          "Next.js",
+          "nextjs"
+        ],
+        [
+          "HTML",
+          "html"
+        ],
+        [
+          "CSS",
+          "css"
+        ],
+        [
+          "Tailwind CSS",
+          "tailwind"
+        ],
+        [
+          "Ionic",
+          "ionic"
+        ]
+      ]
+    },
+    {
+      "id": "backend",
+      "title": "Backend & platforms",
+      "intro": "APIs, application services and business workflows.",
+      "example": "Hospital Platform",
+      "exampleUrl": "/work/hospital-platform/",
+      "tools": [
+        [
+          "Node.js",
+          "nodejs"
+        ],
+        [
+          "Express",
+          "express"
+        ],
+        [
+          "NestJS",
+          "nest"
+        ],
+        [
+          ".NET",
+          "dotnet"
+        ],
+        [
+          "C#",
+          "csharp"
+        ],
+        [
+          "Java",
+          "java"
+        ],
+        [
+          "Spring Boot",
+          "spring"
+        ],
+        [
+          "PHP",
+          "php"
+        ],
+        [
+          "Laravel",
+          "laravel"
+        ],
+        [
+          "Odoo",
+          "odoo"
+        ]
+      ]
+    },
+    {
+      "id": "data",
+      "title": "Data & persistence",
+      "intro": "Relational and document databases, including Oracle during my professional internship.",
+      "example": "User Management API",
+      "exampleUrl": "https://github.com/Elkinnn/APE3---MOVILES",
+      "tools": [
+        [
+          "Oracle",
+          "oracle"
+        ],
+        [
+          "SQL Server",
+          "sqlserver"
+        ],
+        [
+          "PostgreSQL",
+          "postgresql"
+        ],
+        [
+          "MySQL",
+          "mysql"
+        ],
+        [
+          "MongoDB",
+          "mongodb"
+        ],
+        [
+          "Firebase",
+          "firebase"
+        ],
+        [
+          "Prisma",
+          "prisma"
+        ],
+        [
+          "Sequelize",
+          null
+        ],
+        [
+          "Mongoose",
+          null
+        ]
+      ]
+    },
+    {
+      "id": "ai",
+      "title": "Applied AI",
+      "intro": "Computer vision and academic experiments with data and search.",
+      "example": "AI Traffic Monitor",
+      "exampleUrl": "/work/traffic-monitor/",
+      "tools": [
+        [
+          "Python",
+          "python"
+        ],
+        [
+          "OpenCV",
+          "opencv"
+        ],
+        [
+          "Streamlit",
+          "streamlit"
+        ]
+      ]
+    },
+    {
+      "id": "quality",
+      "title": "Quality & delivery",
+      "intro": "Tools used in coursework and shared development workflows.",
+      "example": "Explore the repositories",
+      "exampleUrl": "https://github.com/Elkinnn?tab=repositories",
+      "tools": [
+        [
+          "Docker",
+          "docker"
+        ],
+        [
+          "Git",
+          "git"
+        ],
+        [
+          "Jenkins",
+          "jenkins"
+        ],
+        [
+          "SonarQube",
+          "sonar"
+        ],
+        [
+          "Stryker",
+          "stryker"
+        ],
+        [
+          "JUnit",
+          "junit"
+        ],
+        [
+          "Mocha",
+          "mocha"
+        ],
+        [
+          "Chai",
+          "chai"
+        ],
+        [
+          "ESLint",
+          null
+        ],
+        [
+          "Jira",
+          null
+        ],
+        [
+          "Azure DevOps",
+          null
+        ]
+      ]
+    }
+  ],
+  "concepts": [
+    "ASP.NET / .NET Core",
+    "REST APIs",
+    "Microservices",
+    "SQL & data modeling",
+    "SSAS / data warehousing",
+    "Sequelize & Mongoose",
+    "Computer vision",
+    "Neural networks",
+    "Fuzzy logic",
+    "Genetic algorithms",
+    "Local search",
+    "WebRTC",
+    "Socket.IO",
+    "Bootstrap",
+    "Unit & integration testing",
+    "Static analysis",
+    "Code review",
+    "Scrum"
+  ]
+}

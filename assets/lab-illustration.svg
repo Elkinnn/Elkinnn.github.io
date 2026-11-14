@@ -1,0 +1,153 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="780" height="650" viewBox="0 0 780 650" fill="none">
+  <title>A connected software workspace</title>
+  <desc>An original architectural illustration: a desk for interfaces, a server rack for systems, and a camera workstation for applied AI.</desc>
+  <defs>
+    <pattern id="floor" width="56" height="32" patternUnits="userSpaceOnUse" patternTransform="matrix(1 .55 -1 .55 390 160)"><rect width="56" height="32" fill="#d0d1c2"/><path d="M56 0H0V32" stroke="#b6bba9" stroke-width="1"/></pattern>
+    <pattern id="wood" width="8" height="5" patternUnits="userSpaceOnUse"><rect width="8" height="5" fill="#af7c53"/><path d="M0 1h8" stroke="#bb8a60" stroke-width=".5"/></pattern>
+    <clipPath id="floorClip"><path d="m80 390 335-180 315 180-340 190Z"/></clipPath>
+    <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="9"/></filter>
+    <filter id="smallShadow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="3"/></filter>
+    <g id="plant"><path d="m-15-13 4 28q11 10 23 0l4-28" fill="#b67e58"/><ellipse cy="-13" rx="16" ry="7" fill="#c48d64"/><ellipse cy="-13" rx="12" ry="4" fill="#76684c"/><path d="M0-13V-65m0 37-14-19m14 7 17-22" stroke="#6b7957" stroke-width="2"/><path d="M-2-48q-34-1-29-20 23-4 29 20m4 8q32 0 30-18-19-8-30 18M0-60q-16-17-6-30 17 8 6 30" fill="#75815b"/><path d="M-1-28q-21-1-21-15 15-7 21 15m5-31q22 0 23-13-17-9-23 13" fill="#536a4b"/></g>
+  </defs>
+
+  <!-- Architectural envelope -->
+  <ellipse cx="397" cy="566" rx="264" ry="35" fill="#43503a" opacity=".09" filter="url(#shadow)"/>
+  <path d="m80 390 310 190 340-190v19L390 600 80 409Z" fill="#b6b9a5"/>
+  <path d="m390 580 340-190v19L390 600Z" fill="#959f8b"/>
+  <path d="m80 390 335-180 315 180-340 190Z" fill="url(#floor)"/>
+  <path d="M80 390V202L415 22v188Z" fill="#dedbcd"/>
+  <path d="M415 22 730 202v188L415 210Z" fill="#e9e3d7"/>
+  <path d="m80 202 335-180 8 5L88 207Z" fill="#f7f3e9"/>
+  <path d="m415 22 315 180-8 5L415 32Z" fill="#d5cbbc"/>
+  <path d="m722 207 8-5v188l-8-5Z" fill="#cbbfae"/>
+  <path d="M80 202v188l8-5V207Z" fill="#d0c6b6"/>
+  <path d="m88 385 327-175 307 175" stroke="#b0b3a0" stroke-width="4"/>
+  <path d="m415 32 0 178" stroke="#d0c5b4" stroke-width="2"/>
+
+  <!-- Window, left wall -->
+  <g transform="matrix(.88 -.48 0 1 117 220)">
+    <rect x="-4" y="-4" width="175" height="130" fill="#b2a48e"/>
+    <rect width="167" height="122" fill="#f0f0de"/>
+    <path d="M8 119V35m33 84V15m40 104V49m30 70V10m37 109V38" stroke="#b9c4a4" stroke-width="9"/>
+    <path d="M8 73-3 53m44-2L23 38m58 52 20-21m10-24 20-20m17 65 16-16" stroke="#a2b28a" stroke-width="9"/>
+    <path d="M0 0h167v122H0Z" stroke="#666c5a" stroke-width="5"/>
+    <path d="M83 0v122M0 59h167" stroke="#6f715e" stroke-width="4"/>
+  </g>
+  <path d="m111 348 158-86 13 7-158 86Z" fill="#f7f3e8"/>
+  <path d="m124 355 158-86v7l-158 86Z" fill="#beb39c"/>
+
+  <!-- Wall study, right wall -->
+  <g transform="matrix(.88 .5 0 1 590 145)">
+    <rect x="-4" y="-4" width="100" height="92" fill="#aa967a"/>
+    <rect width="92" height="84" fill="#f4efe3"/>
+    <path d="M11 62h69M24 62V40h18V23h18v39M13 40h66M47 12v60" stroke="#c6cab5" stroke-width="1"/>
+    <path d="m15 54 16-17 15 5 17-19 16 12" stroke="#8e9d7d" stroke-width="2"/>
+    <circle cx="63" cy="23" r="3" fill="#aa6d4c"/>
+  </g>
+  <path d="m468 111 25 15v25" stroke="#9e6746" stroke-width="4" stroke-linecap="round"/>
+  <path d="m482 145 22 13-11 8-22-13Z" fill="#ba8252"/>
+  <path d="m482 158 30 18-20 24-29-17Z" fill="#f0dab0" opacity=".3"/>
+
+  <!-- Floor runner and floor light -->
+  <path d="m257 420 130-70 170 97-131 73Z" fill="#c5c6b4"/>
+  <path d="m267 420 120-64 159 91-120 66Z" fill="#ddd9c5"/>
+  <path d="m277 420 110-58 149 85-110 59Z" stroke="#babda7" stroke-width=".8"/>
+  <path d="m314 402 149 85m-133-94 149 85m-133-94 149 85m-133-94 149 85m-133-94 149 85" stroke="#c1c4ae" stroke-width=".6"/>
+  <path d="m285 431 101-54 120 68-101 55Z" fill="#667356" opacity=".09" filter="url(#shadow)"/>
+
+  <!-- Systems station: cabinet, shelf and equipment -->
+  <path d="m415 339 70 39 63-35-71-40Z" fill="#6f755f" opacity=".2" filter="url(#smallShadow)"/>
+  <path d="m426 181 61 35v151l-61-35Z" fill="#3b493d"/>
+  <path d="m487 216 37-20v151l-37 20Z" fill="#2d3c35"/>
+  <path d="m426 181 37-20 61 35-37 20Z" fill="#7b8569"/>
+  <g transform="matrix(.86 .5 0 1 433 193)">
+    <rect width="54" height="128" rx="2" fill="#26372f"/>
+    <path d="M4 5h46v23H4Zm0 31h46v23H4Zm0 31h46v23H4Zm0 31h46v23H4Z" fill="#566149" stroke="#71805a" stroke-width=".8"/>
+    <path d="M9 12h24M9 17h24M9 43h24M9 48h24M9 74h24M9 79h24M9 105h24M9 110h24" stroke="#83906b" stroke-width="1.5"/>
+    <path d="M40 12h4v4h-4zm0 31h4v4h-4zm0 31h4v4h-4zm0 31h4v4h-4z" fill="#d6b776"/>
+  </g>
+  <path d="m517 282 64 36 56-31-64-37Z" fill="url(#wood)"/>
+  <path d="m517 282 64 36v70l-64-36Z" fill="#a17853"/>
+  <path d="m581 318 56-31v70l-56 31Z" fill="#7a7051"/>
+  <path d="m524 296 48 28m-48-8 48 28m-48-8 48 28" stroke="#825f44" stroke-width="1"/>
+  <g transform="matrix(.86 .5 0 1 542 229)">
+    <rect x="-3" y="-3" width="62" height="47" rx="3" fill="#414e43"/>
+    <rect width="56" height="39" fill="#22372f"/>
+    <ellipse cx="28" cy="10" rx="12" ry="4" stroke="#b1c09a"/>
+    <path d="M16 10v18c0 5 24 5 24 0V10m-24 9c0 5 24 5 24 0" stroke="#b1c09a"/>
+    <path d="M26 44v12m-13 0h30" stroke="#4a5443" stroke-width="4"/>
+  </g>
+  <path d="m521 168 84 48 10-6-84-48Z" fill="#b18052"/>
+  <path d="m521 168 84 48v5l-84-48Z" fill="#976a46"/>
+  <g transform="matrix(.86 .5 0 1 549 139)"><rect width="6" height="29" fill="#63725b"/><rect x="7" y="-5" width="8" height="34" fill="#c1ad85"/><rect x="16" y="-3" width="6" height="32" fill="#736e55"/><rect x="23" y="-7" width="8" height="36" fill="#cfc5aa"/></g>
+  <use href="#plant" transform="translate(347 242) scale(.68)"/>
+
+  <!-- Interface station: desk and two screens -->
+  <path d="m138 431 125 69 147-86-127-72Z" fill="#667356" opacity=".16" filter="url(#smallShadow)"/>
+  <path d="m139 349 8 5v85l-8-5zm111 58 8-5v87l-8 5zm139-80 8 4v84l-8-4Z" fill="#716b50"/>
+  <path d="m137 343 148-80 119 68-148 83Z" fill="url(#wood)"/>
+  <path d="m137 343 119 71v9l-119-71Z" fill="#946a45"/>
+  <path d="m256 414 148-83v9l-148 83Z" fill="#ba8d5f"/>
+  <path d="m156 359 40 23v48l-40-23Z" fill="#9e7851"/>
+  <path d="m163 375 24 14m-24 1 24 14" stroke="#6f6245" stroke-width="1"/>
+  <path d="m225 307 10 6v21l-10-6Z" fill="#5e6953"/>
+  <path d="m212 328 21-11 22 12-21 12Z" fill="#5e6953"/>
+  <g transform="matrix(.86 -.48 0 1 184 250)">
+    <rect x="-4" y="-4" width="104" height="80" rx="4" fill="#3d493b"/>
+    <rect width="96" height="72" fill="#f2f1e3"/>
+    <rect width="20" height="72" fill="#637252"/>
+    <path d="M5 9h10M5 20h9M5 27h7M5 34h9M5 41h6" stroke="#b6c49a" stroke-width="2"/>
+    <path d="M29 10h36M29 16h21" stroke="#7c8968" stroke-width="2"/>
+    <rect x="28" y="25" width="60" height="29" rx="2" fill="#dce3ce"/>
+    <path d="m33 46 11-8 11 4 11-10 15 3" stroke="#7a8d61" stroke-width="1.6"/>
+    <path d="M29 62h23m7 0h28" stroke="#b6c0a0" stroke-width="3"/>
+  </g>
+  <g transform="matrix(.86 .5 0 1 280 207)">
+    <rect x="-4" y="-4" width="75" height="76" rx="3" fill="#3d493b"/>
+    <rect width="67" height="68" fill="#283a32"/>
+    <path d="M7 8h29M10 17h43M15 25h22M15 33h38M10 42h20M15 50h40M10 59h25" stroke="#a8b78c" stroke-width="2"/>
+    <path d="M38 8h13M39 25h15M32 42h20" stroke="#bd8e61" stroke-width="2"/>
+    <path d="M31 72v14m-12 0h29" stroke="#53634c" stroke-width="4"/>
+  </g>
+  <path d="m232 359 54-29 38 22-54 30Z" fill="#d6cfb6" stroke="#8d927b"/>
+  <path d="m239 359 47-25m-41 29 47-25m-40 29 47-25m-41 29 47-25" stroke="#9ca189" stroke-width="1"/>
+  <ellipse cx="333" cy="370" rx="8" ry="5" transform="rotate(-26 333 370)" fill="#dedcc9" stroke="#92977f"/>
+  <path d="m162 334 7-4 15 8-7 4Z" fill="#f1e8d3"/>
+  <path d="m162 334 15 8v12l-15-8Z" fill="#e0d2b6"/>
+  <path d="m177 342 7-4v12l-7 4Z" fill="#c6b393"/>
+
+  <!-- Chair -->
+  <path d="m292 428 27-15 32 18-27 15Z" fill="#4d604b"/>
+  <path d="M301 401q-4-17 12-13l31 15q10 5 8 18l-1 10-36-17q-10-4-14-13" fill="#66765b"/>
+  <path d="m323 440 0 39m0-2-30 9m30-9 29 16m-29-16 7-13" stroke="#57624e" stroke-width="4" stroke-linecap="round"/>
+  <ellipse cx="293" cy="487" rx="4" ry="3" fill="#42543f"/><ellipse cx="353" cy="494" rx="4" ry="3" fill="#42543f"/>
+
+  <!-- AI station: desk, screen, camera -->
+  <path d="m501 450 75 44 118-67-76-43Z" fill="#667356" opacity=".17" filter="url(#smallShadow)"/>
+  <path d="m500 381 9 5v65l-9-5zm74 45 9-5v67l-9 5zm107-68 8 4v65l-8-5Z" fill="#796e50"/>
+  <path d="m492 376 111-60 92 52-112 65Z" fill="url(#wood)"/>
+  <path d="m492 376 91 57v7l-91-57Z" fill="#926a46"/>
+  <path d="m583 433 112-65v7l-112 65Z" fill="#bc9063"/>
+  <g transform="matrix(.86 .5 0 1 582 298)">
+    <rect x="-4" y="-4" width="77" height="65" rx="3" fill="#3d4a3d"/>
+    <rect width="69" height="57" fill="#233930"/>
+    <path d="M8 12V7h11m30 0h11v5M8 43v5h11m30 0h11v-5" stroke="#9ab282"/>
+    <path d="m15 35 6-15h26l8 15v6H15Z" fill="#bdbaa1"/>
+    <rect x="25" y="33" width="19" height="6" fill="#e9e6ce"/>
+    <path d="M31 61v14m-12 0h29" stroke="#53634c" stroke-width="4"/>
+  </g>
+  <path d="m560 386 32-18 36 20-33 19Z" fill="#c2bd9e" stroke="#8d927b"/>
+  <path d="m568 385 24-13m-18 17 24-13m-18 17 24-13" stroke="#8d927b"/>
+  <path d="m526 349-13 43m13-43 18 44m-18-44v48" stroke="#53634b" stroke-width="2.5"/>
+  <path d="m512 324 11-6 21 12-11 6Z" fill="#7a8665"/>
+  <path d="m512 324 21 12v15l-21-12Z" fill="#3a4e3d"/>
+  <path d="m533 336 11-6v15l-11 6Z" fill="#2b4134"/>
+  <ellipse cx="541" cy="340" rx="6" ry="8" fill="#1a3029"/>
+  <ellipse cx="542" cy="340" rx="3" ry="4" fill="#718b73"/>
+  <use href="#plant" transform="translate(660 368) scale(.44)"/>
+  <use href="#plant" transform="translate(134 408) scale(.76)"/>
+
+  <!-- Drawing registration: a visual study, not the game scene -->
+  <path d="M59 424v19l35 20M700 433l38-20v-16M355 600l35 20 35-20" stroke="#b2b7a4" stroke-width=".8"/>
+  <text x="396" y="638" text-anchor="middle" font-family="Arial,sans-serif" font-size="7" letter-spacing="3" fill="#7b826e">EL / SYSTEMS LAB</text>
+</svg>

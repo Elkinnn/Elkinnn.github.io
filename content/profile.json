@@ -1,0 +1,86 @@
+{
+  "name": "Elkin Joao López Garcés",
+  "shortName": "Elkin López",
+  "title": "Software Engineering Student",
+  "email": "elkinjoao2004@hotmail.com",
+  "github": "https://github.com/Elkinnn",
+  "linkedin": "https://www.linkedin.com/in/elkin-joao-l%C3%B3pez-garc%C3%A9s-479037416/",
+  "photo": "/assets/profile/elkin-lopez.jpg",
+  "cv": "/assets/cv/elkin-lopez-cv.pdf",
+  "summary": "Software Engineering student with academic and collaborative work across web interfaces, backend services, databases and applied AI. Professional internship experience with Angular, C# and Oracle at AMBACAR.",
+  "education": {
+    "institution": "Universidad Técnica de Ambato",
+    "degree": "Software Engineering",
+    "semester": "Eighth semester",
+    "status": "In progress"
+  },
+  "experience": {
+    "company": "AMBACAR",
+    "role": "Software Development & IT Support",
+    "type": "Professional internship",
+    "startDate": "2026-06-22",
+    "endDate": null,
+    "ongoing": false,
+    "summary": "Contributed to AMBYSOFT business applications and supported technology operations across AMBACAR agencies.",
+    "technologies": [
+      "Angular",
+      "C#",
+      "Oracle"
+    ],
+    "responsibilities": [
+      {
+        "title": "Requirements & application design",
+        "text": "Configured the development environment, analyzed requirements, reviewed the architecture and contributed to the functional design of the ZEUS user administration module in AMBYSOFT."
+      },
+      {
+        "title": "Frontend development",
+        "text": "Designed, developed and optimized Angular interfaces for Workshop Employee, Roles, ZEUS Menu and Seller workflows in the Reverse Flow module."
+      },
+      {
+        "title": "Backend & data integration",
+        "text": "Analyzed the Oracle database, developed backend functionality in C# and integrated services with the frontend of the Reverse Flow module."
+      },
+      {
+        "title": "Testing & maintenance",
+        "text": "Executed functional and integration tests, refactored code, corrected issues and applied technical adjustments to the developed functionality."
+      },
+      {
+        "title": "Technology operations",
+        "text": "Provided technical support, preventive maintenance, equipment checks and technology asset inventory updates across AMBACAR agencies."
+      }
+    ],
+    "hours": 240,
+    "completed": true,
+    "reflection": "The internship introduced me to professional development workflows, new technologies and the day-to-day work of a business technology team."
+  },
+  "portraits": {
+    "main": {
+      "src": "/assets/profile/elkin-blazer-1133.webp",
+      "srcset": "/assets/profile/elkin-blazer-640.webp 640w, /assets/profile/elkin-blazer-1133.webp 1133w",
+      "width": 1133,
+      "height": 1388,
+      "alt": "Elkin López wearing a navy blazer and white shirt"
+    },
+    "secondary": {
+      "src": "/assets/profile/elkin-tuxedo-1133.webp",
+      "srcset": "/assets/profile/elkin-tuxedo-640.webp 640w, /assets/profile/elkin-tuxedo-1133.webp 1133w",
+      "width": 1133,
+      "height": 1388,
+      "alt": "Elkin López wearing a black tuxedo with a pink brooch"
+    },
+    "round": {
+      "src": "/assets/profile/elkin-round-1133.webp",
+      "srcset": "/assets/profile/elkin-round-640.webp 640w, /assets/profile/elkin-round-1133.webp 1133w",
+      "width": 1133,
+      "height": 1133,
+      "alt": "Elkin López wearing a tuxedo with a pink flower"
+    },
+    "alternate": {
+      "src": "/assets/profile/elkin-sweater-1133.webp",
+      "srcset": "/assets/profile/elkin-sweater-640.webp 640w, /assets/profile/elkin-sweater-1133.webp 1133w",
+      "width": 1133,
+      "height": 1388,
+      "alt": "Elkin López wearing a navy sweater"
+    }
+  }
+}

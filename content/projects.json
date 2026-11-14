@@ -1,0 +1,82 @@
+{
+  "stayschool": {
+    "title": "StaySchool",
+    "category": "INTERFACES / ACADEMIC WEB APPLICATION",
+    "summary": "Student tracking and early warnings for rural education settings.",
+    "context": "StaySchool brings student follow-up into an application with separate views for teachers and guardians. Its workflows include observations, alerts and notifications around student tracking.",
+    "contribution": "I helped implement the foundation of the student tracking and alert system. The linked commit provides a record of that contribution within the wider project.",
+    "architecture": "The application uses Next.js and TypeScript for its web interface and application logic, with MongoDB and Mongoose for persistence. Authentication and role-specific views provide separate access for teachers and guardians.",
+    "tags": [
+      "Next.js",
+      "React",
+      "TypeScript",
+      "Tailwind CSS",
+      "MongoDB",
+      "Mongoose"
+    ],
+    "repo": "https://github.com/Elkinnn/school-project",
+    "history": "https://github.com/Elkinnn/school-project/commit/bbb31b61eb469191f91e767e1660bc75d4d7770c",
+    "id": "stayschool",
+    "path": "stayschool",
+    "shortTitle": "StaySchool",
+    "area": "interfaces",
+    "scope": "Academic web application",
+    "role": "Tracking & alert foundations",
+    "number": "01",
+    "visual": "school",
+    "url": "/work/stayschool/"
+  },
+  "hospital": {
+    "title": "Distributed Hospital Platform",
+    "category": "SYSTEMS / ACADEMIC APPLICATION",
+    "summary": "A hospital management application built around separate services.",
+    "context": "The project connects a React frontend with an API gateway and separate administration and physician services. It provides an academic setting for working with service communication, persistence and deployment.",
+    "contribution": "I worked on circuit-breaker notifications, PDF reports and deployment updates related to Azure. These contributions address specific parts of the application and its delivery setup.",
+    "architecture": "The frontend communicates through an API gateway with separate backend services. The current application entry points use Node.js and Express, with MySQL persistence and Docker-based service composition.",
+    "tags": [
+      "React",
+      "Node.js",
+      "Express",
+      "MySQL",
+      "Docker"
+    ],
+    "repo": "https://github.com/Elkinnn/PruebaDistribuidas",
+    "history": "https://github.com/Elkinnn/PruebaDistribuidas/commits/main/?author=Elkinnn",
+    "id": "hospital",
+    "path": "hospital-platform",
+    "shortTitle": "Hospital Platform",
+    "area": "systems",
+    "scope": "Academic distributed application",
+    "role": "Service features & deployment updates",
+    "number": "02",
+    "visual": "hospital",
+    "url": "/work/hospital-platform/"
+  },
+  "traffic": {
+    "title": "Ecuador AI Traffic Monitor",
+    "category": "APPLIED AI / ACADEMIC PROJECT",
+    "summary": "An academic computer vision pipeline for plates and vehicle speed estimation.",
+    "context": "The project explores Ecuadorian license plate recognition and vehicle speed estimation. It brings together object detection, image processing, character recognition and fuzzy inference, with a monitoring interface in Streamlit.",
+    "contribution": "I contributed implementation updates and refactoring. The linked commit records part of that work within the project.",
+    "architecture": "The pipeline combines YOLO detection, OpenCV segmentation, a project-specific CNN for character recognition and Mamdani fuzzy inference. Streamlit provides the monitoring interface.",
+    "tags": [
+      "Python",
+      "YOLO",
+      "OpenCV",
+      "CNN",
+      "Mamdani fuzzy inference",
+      "Streamlit"
+    ],
+    "repo": "https://github.com/Elkinnn/Proyecto-IA---Foto-Radar",
+    "history": "https://github.com/Elkinnn/Proyecto-IA---Foto-Radar/commit/2e42d23aed2698690a054d78f7e038e9be24140a",
+    "id": "traffic",
+    "path": "traffic-monitor",
+    "shortTitle": "AI Traffic Monitor",
+    "area": "ai",
+    "scope": "Academic applied AI project",
+    "role": "Implementation updates & refactoring",
+    "number": "03",
+    "visual": "traffic",
+    "url": "/work/traffic-monitor/"
+  }
+}

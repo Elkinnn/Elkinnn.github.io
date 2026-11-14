@@ -1,0 +1,14 @@
+.field-briefing { width:min(650px,calc(100% - 32px)); }.field-briefing > .button { width:100%; justify-content:space-between; }
+.game-world.field-courier { --field-accent:#90efc7; }.game-world.field-scanner { --field-accent:#c0afff; }
+.field-hud { border-left-color:var(--field-accent); }.field-hud .sector-heading > span { color:var(--field-accent); }.field-hud .sector-stats { color:var(--field-accent); }
+#guide-field { background:none; color:var(--field-accent); font-size:10px; padding:6px 0 0; min-height:40px; text-align:left; }
+.field-meter { height:4px; border-radius:3px; background:#30445f; margin-top:12px; overflow:hidden; }.field-meter i { display:block; height:100%; width:0; background:var(--field-accent); }
+.field-aim { border-color:#c6b8ff; }.field-aim > span { color:#e0d7ff; border-color:#8a83b8; }
+.game-body .field-scanner .fire-blaster { border-color:#b2a0ed; color:#dfd4ff; background:#2b2c56df; }
+.game-body .field-hud > .sector-aim-hint { color:#c2d1e4; }
+.map-dialog > .sector-launch + .sector-launch { margin-top:7px; }.game-body .sector-launch[data-mission=interfaces] { background:#84dbc0; }.game-body .sector-launch[data-mission=ai] { background:#baa8ef; color:#18223a; border-color:#cdbffb; }
+@media(max-width:650px) {
+ #guide-field { font-size:9px; min-height:44px; }.field-meter { margin-top:9px; }
+ .game-body .field-active .world-interact { bottom:300px; }.game-body .field-active .game-message { bottom:365px; }
+ .field-hud > p { font-size:9px; }.field-hud #field-hint { display:none; }
+}

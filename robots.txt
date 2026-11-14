@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://elkinnn.github.io/sitemap.xml

@@ -1,0 +1,4 @@
+{
+ "en":{"menu":"Menu","close":"Close","dark":"Switch to dark theme","light":"Switch to light theme","projects":"{n} projects & experiments","project":"{n} project & experiment","tools":"{n} tools","tool":"{n} tool","copied":"Email copied. Ready when you are.","copyFailed":"Select the email address above to copy it.","phrases":["interfaces.","connected systems.","applied AI."]},
+ "es":{"menu":"Menú","close":"Cerrar","dark":"Cambiar al tema oscuro","light":"Cambiar al tema claro","projects":"{n} proyectos y experimentos","project":"{n} proyecto y experimento","tools":"{n} herramientas","tool":"{n} herramienta","copied":"Correo copiado. Hablemos cuando quieras.","copyFailed":"Selecciona el correo de arriba para copiarlo.","phrases":["interfaces.","sistemas conectados.","IA aplicada."]}
+}

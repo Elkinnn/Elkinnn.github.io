@@ -1,0 +1,40 @@
+.systems-briefing { width:min(630px,calc(100% - 32px)); }
+.sector-brief-steps { display:grid; grid-template-columns:1fr 1fr; gap:12px; list-style:none; padding:0; margin:24px 0; counter-reset:brief; }
+.sector-brief-steps li { counter-increment:brief; border:1px solid #35526b; background:#10273c; padding:15px; font-size:11px; line-height:1.8; color:#a9c0d5; border-radius:4px; }
+.sector-brief-steps li::before { content:'0' counter(brief); display:block; color:#eab879; font:10px Consolas,monospace; margin-bottom:10px; }
+.sector-brief-steps strong { display:block; font-size:12px; font-weight:500; color:#dceffd; margin-bottom:7px; }
+.sector-save-status { border-left:2px solid #6dd4c1; padding-left:13px; font-size:11px; line-height:1.8; color:#a9ccda; }
+.systems-briefing > .button { width:100%; justify-content:space-between; margin-top:17px; }
+.sector-practice-note { font-size:9px; line-height:1.8; color:#88a4bf; }
+.sector-hud { position:absolute; left:26px; top:94px; width:290px; padding:15px 17px; z-index:3; color:#dbedff; background:#0a1b30e8; border:1px solid #4c718b; border-left:2px solid #f3ba76; border-radius:4px; backdrop-filter:blur(10px); }
+.sector-heading { display:flex; align-items:center; justify-content:space-between; gap:10px; }
+.sector-heading > span { font:8px Consolas,monospace; color:#e4bd8a; letter-spacing:.06em; }
+.sector-heading > button { flex:none; min-width:44px; min-height:36px; font-size:20px; background:none; color:#b8d3e8; margin:-7px -12px -4px 0; }
+.sector-hud h2 { font:500 20px var(--sans); letter-spacing:-.035em; margin:9px 0 13px; }
+.sector-stats { display:flex; justify-content:space-between; gap:12px; color:#9be7da; font:10px Consolas,monospace; }
+.sector-stats .low-shields { color:#ffc18c; }
+.sector-hud > p { font-size:10px; color:#abc5d9; line-height:1.7; margin-top:11px; }
+.sector-hud > .sector-aim-hint { color:#cbe9f5; font-size:10px; margin-top:5px; }
+#guide-systems { font-size:10px; color:#93ded1; background:none; padding:6px 0 0; min-height:36px; text-align:left; }
+.sector-aim { position:absolute; z-index:2; pointer-events:none; transform:translate(-50%,-50%); width:43px; height:43px; border:1px solid #a1f9e1; border-radius:8px; box-shadow:0 0 12px #6fefdb33; }
+.sector-aim::before,.sector-aim::after { content:''; position:absolute; background:#b3ffe9; height:1px; width:8px; top:50%; }
+.sector-aim::before { left:-5px; }.sector-aim::after { right:-5px; }
+.sector-aim > span { display:block; position:absolute; top:49px; left:50%; transform:translateX(-50%); font:8px Consolas,monospace; background:#10283ade; color:#c4ffef; white-space:nowrap; border:1px solid #527f8a; padding:4px 7px; border-radius:3px; }
+.game-body .fire-blaster { position:absolute; right:26px; bottom:142px; min-width:75px; min-height:65px; z-index:4; display:flex; flex-direction:column; gap:2px; background:#163c4be6; border-color:#8de6cd; color:#b3ffe8; user-select:none; touch-action:none; }
+.fire-blaster > span { font-size:25px; }.fire-blaster > small { font:8px Consolas,monospace; letter-spacing:.08em; }
+.game-body .fire-blaster:active { background:#2d6b69; }
+.sector-fire-hint { display:none; }.systems-active .sector-fire-hint { display:inline; }
+@media(max-width:650px) {
+ .sector-hud { left:14px; top:124px; width:250px; padding:11px 13px; }
+ .sector-heading { min-height:15px; padding-right:37px; }.sector-heading > span { font-size:7px; }.sector-heading > button { position:absolute; top:1px; right:4px; min-height:44px; min-width:44px; margin:0; }
+ .sector-hud h2 { font-size:18px; margin:6px 0 10px; }.sector-stats { font-size:9px; gap:10px; }
+ .sector-hud > p { font-size:9px; margin-top:7px; }.sector-hud > .sector-aim-hint { display:none; }
+ #guide-systems { font-size:9px; min-height:44px; }
+ .game-body .fire-blaster { right:19px; bottom:213px; width:56px; min-width:56px; height:56px; min-height:56px; padding:0; border-radius:7px; }
+ .fire-blaster > span { font-size:22px; }.fire-blaster > small { font-size:6px; }
+ .game-body .systems-active .world-interact { bottom:300px; }.game-body .systems-active .game-message { bottom:365px; }
+ .sector-brief-steps { grid-template-columns:1fr; gap:9px; margin:19px 0; }.sector-brief-steps li { padding:12px; }.sector-brief-steps li::before { float:left; margin:3px 13px 3px 0; }.sector-brief-steps strong { font-size:12px; }
+}
+@media(max-height:550px) and (min-width:651px) { .sector-hud { top:80px; width:250px; padding:10px 14px; }.sector-hud h2 { font-size:17px; margin-block:6px; }.sector-hud > p { margin-top:5px; }.sector-hud > .sector-aim-hint { display:none; } }
+
+.map-dialog > .sector-launch { width:100%; justify-content:space-between; margin-top:15px; min-height:44px; font-size:11px; }

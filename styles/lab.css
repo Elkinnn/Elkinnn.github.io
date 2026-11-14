@@ -1,0 +1,115 @@
+@import url('./world.css');
+/* The Systems puzzle remains accessible independently of the 3D view. */
+.systems-dialog,.station-dialog { border:1px solid #bebca9; background:var(--paper-light); color:var(--ink); padding:0; border-radius:4px; max-height:calc(100dvh - 40px); overscroll-behavior:contain; }
+.systems-dialog { width:min(1200px,calc(100% - 48px)); }
+.systems-dialog::backdrop,.station-dialog::backdrop { background:#102328ba; backdrop-filter:blur(5px); }
+.mission-toolbar { display:flex; justify-content:space-between; align-items:center; gap:20px; padding:10px 26px; border-bottom:1px solid var(--line); position:sticky; top:0; z-index:5; background:var(--paper-light); }
+.mission-toolbar > .eyebrow { font-size:8px; color:var(--copper); }
+.mission-heading { padding:28px 32px 0; }
+.mission-heading h2 { font-family:var(--serif); font-size:47px; letter-spacing:-.04em; line-height:1.1; }
+.mission-heading h2 em { color:var(--sage); }
+.mission-heading > p { font-size:13px; margin-top:13px; color:var(--muted); }
+.mission-heading > span { display:block; font-size:10px; color:var(--muted); margin-top:7px; }
+.mission-layout { display:grid; grid-template-columns:minmax(0,1fr) 245px; gap:30px; padding:27px 32px 30px; }
+.mission-puzzle { min-width:0; }
+.connection-board { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:51px; align-items:center; position:relative; min-height:240px; padding:16px 4px; }
+.connection-module { background:#eeeee2; border:1px solid #c5cdb6; border-radius:3px; position:relative; text-align:center; padding:21px 10px 19px; z-index:1; }
+.module-number { font-size:6px; letter-spacing:.1em; color:#67745c; }
+.module-icon { width:42px; height:42px; fill:none; stroke:#637751; stroke-width:1.7; margin:17px auto 13px; }
+.connection-module h3 { font-family:var(--serif); font-size:22px; letter-spacing:-.03em; line-height:1.15; }
+.connection-module > p { font-size:9px; color:var(--muted); margin-top:7px; }
+.api-module { background:#e3e8d7; border-color:#9caa86; }
+.port { position:absolute; top:50%; transform:translateY(-50%); border:0; background:none; padding:11px; width:44px; height:44px; z-index:2; }
+.port-in { left:-22px; }.port-out { right:-22px; }
+.port > span { width:22px; height:22px; display:block; border:2px solid #9b724d; background:#f9f4e8; border-radius:50%; box-shadow:0 0 0 4px #f5f1e8; transition:background .2s; }
+.port::after { position:absolute; top:42px; left:13px; font-size:6px; color:#6d795d; letter-spacing:.08em; }
+.port-in::after { content:'IN'; }.port-out::after { content:'OUT'; }
+.port:hover > span,.port[aria-pressed=true] > span { background:#d8b789; }
+.port[aria-pressed=true] > span { box-shadow:0 0 0 4px #c5a27144; }
+.port.is-connected > span { background:#8b9d72; border-color:#566c43; }
+.connection-wires { position:absolute; inset:0; width:100%; height:100%; overflow:visible; pointer-events:none; z-index:0; }
+.connection-wires path { fill:none; stroke:#af7b52; stroke-width:3; stroke-linecap:round; }
+.is-solved .connection-wires path { stroke:#798c5b; }
+.connection-feedback { display:flex; justify-content:space-between; align-items:start; gap:20px; border-block:1px solid var(--line); padding:13px 0; min-height:60px; }
+.connection-feedback p { font-size:11px; color:#6a6c5f; max-width:420px; }
+.connection-feedback > span { font-size:9px; color:var(--muted); white-space:nowrap; padding-top:1px; }
+.mission-success { display:flex; align-items:center; gap:16px; background:#e1e8d4; border:1px solid #bdcba3; padding:15px 17px; margin-top:17px; }
+.mission-success > span { color:#526c3c; font-size:22px; }
+.mission-success h3 { font-family:var(--serif); font-size:22px; }
+.mission-success p { font-size:10px; color:var(--muted); margin-top:4px; }
+.mission-actions { display:flex; justify-content:space-between; gap:24px; align-items:start; padding-top:11px; }
+.mission-actions details { font-size:10px; max-width:430px; }
+.mission-actions summary { cursor:pointer; min-height:38px; padding-block:9px; color:#647451; }
+.mission-actions details p { font-size:11px; line-height:1.85; color:var(--muted); }
+.mission-actions > button { background:none; font-size:10px; min-height:38px; padding:0; flex:none; color:var(--muted); }
+.mission-project { border-left:1px solid var(--line); padding-left:24px; align-self:stretch; }
+.mission-project > .eyebrow { font-size:6px; color:var(--copper); }
+.mission-project h3 { font-family:var(--serif); font-size:35px; line-height:1.07; letter-spacing:-.04em; margin-top:17px; }
+.mission-project h3 em { color:var(--sage); }
+.mission-project > p:not(.eyebrow) { font-size:11px; line-height:1.85; color:var(--muted); margin-top:16px; }
+.mission-project .mission-personal { border-left:1px solid #b6bfa3; padding-left:12px; }
+.mission-personal > span { display:block; font-size:6px; letter-spacing:.1em; font-weight:600; margin-bottom:4px; }
+.mission-project > .button { margin-top:23px; font-size:10px; gap:30px; }
+.mission-project > .mission-concept { font-family:var(--serif); font-style:italic; font-size:10px !important; }
+.mission-footer { display:flex; align-items:center; justify-content:space-between; gap:20px; border-top:1px solid var(--line); padding:15px 30px; }
+.mission-footer > p { font-family:var(--serif); font-style:italic; color:var(--muted); font-size:13px; }
+.mission-footer > .button { font-size:11px; }
+.station-dialog { width:min(540px,calc(100% - 30px)); }
+.station-dialog-body { padding:30px; }
+.station-dialog-body h2 { font-family:var(--serif); font-size:39px; letter-spacing:-.04em; margin-top:17px; }
+.station-dialog-body > p:not(.project-type) { font-size:13px; line-height:1.9; color:var(--muted); margin-top:20px; }
+.station-dialog-body > a { margin-top:24px; font-size:11px; }
+
+@media(max-width:900px) {
+  .mission-layout { grid-template-columns:1fr; }
+  .mission-project { border-left:0; border-top:1px solid var(--line); padding:23px 0 0; display:grid; grid-template-columns:1fr 1fr; gap:13px 28px; }
+  .mission-project > .eyebrow { grid-column:1/-1; }
+  .mission-project h3 { margin:0; font-size:32px; }
+  .mission-project > p:not(.eyebrow) { margin:0; }
+  .mission-project > .button { margin:0; align-self:start; }
+  .mission-project .tags { margin:0; align-self:center; }
+  .mission-project .mission-personal { grid-column:1; }
+  .connection-board { gap:52px; }
+}
+@media(max-width:680px) {
+  .systems-dialog { width:calc(100% - 22px); max-height:calc(100dvh - 24px); }
+  .mission-toolbar { padding:8px 18px; gap:14px; }
+  .mission-toolbar > .eyebrow { font-size:7px; }
+  .mission-heading { padding:23px 22px 0; }
+  .mission-heading h2 { font-size:36px; }
+  .mission-heading > p { font-size:12px; margin-top:13px; }
+  .mission-heading > span { font-size:10px; line-height:1.8; }
+  .mission-layout { padding:25px 22px 23px; gap:24px; }
+  .connection-board { grid-template-columns:1fr; gap:45px; padding:9px 28px; min-height:0; }
+  .connection-module { padding:13px 17px; min-height:145px; display:grid; grid-template-columns:45px 1fr; gap:5px 15px; text-align:left; align-items:center; }
+  .module-number { grid-column:1/-1; font-size:7px; }
+  .module-icon { grid-column:1; grid-row:2/4; width:35px; height:35px; margin:10px 0; }
+  .connection-module h3 { grid-column:2; font-size:24px; align-self:end; }
+  .connection-module > p { grid-column:2; font-size:10px; margin:0; align-self:start; }
+  .port { left:50%; right:auto; top:auto; transform:translateX(-50%); }
+  .port-in { top:-22px; }.port-out { bottom:-22px; }
+  .port::after { top:15px; left:44px; font-size:6px; }
+  .connection-feedback { flex-direction:column; gap:6px; padding-block:12px; margin-top:17px; }
+  .connection-feedback p { font-size:11px; }
+  .mission-success { padding:13px; gap:12px; }
+  .mission-success h3 { font-size:22px; }
+  .mission-success p { font-size:10px; }
+  .mission-actions { gap:20px; }
+  .mission-actions summary,.mission-actions > button { min-height:44px; }
+  .mission-project { display:block; }
+  .mission-project > .eyebrow { font-size:7px; }
+  .mission-project h3 { font-size:34px; margin-top:14px; }
+  .mission-project h3 br { display:none; }
+  .mission-project > p:not(.eyebrow) { font-size:12px; margin-top:15px; }
+  .mission-project .mission-personal { margin-top:17px; }
+  .mission-project .tags { margin-top:18px; }
+  .mission-project > .button { margin-top:18px; font-size:11px; }
+  .mission-footer { padding:14px 20px; flex-wrap:wrap; gap:12px; }
+  .mission-footer > p { font-size:12px; }
+  .mission-footer > .button { font-size:10px; gap:25px; }
+  .station-dialog-body { padding:25px; }
+  .station-dialog-body h2 { font-size:34px; }
+}
+@media(prefers-reduced-motion:reduce) {
+  .port > span { transition:none; }
+}

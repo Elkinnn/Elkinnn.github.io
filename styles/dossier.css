@@ -1,0 +1,42 @@
+/* One project dossier shared by all completed Orbital missions. */
+.project-dossier { width:min(1060px,calc(100% - 48px)); margin:auto; background:linear-gradient(135deg,#11253c,#0a172b); color-scheme:dark; }
+.project-dossier .mission-toolbar { gap:16px; padding:12px 30px; }
+.project-dossier .mission-toolbar > .eyebrow { color:#9ce9da; font:9px Consolas,monospace; letter-spacing:.08em; }
+.project-dossier .dialog-close { flex:none; min-height:44px; }
+.dossier-heading { padding:27px 32px 21px; }
+.dossier-heading > .eyebrow { font-size:9px; color:#f0c28f; }
+.dossier-heading h2 { font:500 clamp(29px,3.2vw,42px)/1.14 var(--sans); letter-spacing:-.04em; margin-top:9px; text-wrap:balance; }
+.dossier-heading > p:last-child { font-size:13px; color:#a7c0d8; margin-top:12px; max-width:680px; }
+.dossier-achievement { display:flex; align-items:center; gap:15px; margin:0 32px; padding:15px 18px; background:#143c40; border:1px solid #376e6a; border-radius:5px; }
+.dossier-achievement > span { flex:none; color:#9af5dc; font-size:25px; }
+.dossier-achievement h3 { font-size:14px; font-weight:500; color:#c7fff0; }
+.dossier-achievement p { font-size:11px; color:#acd7d3; line-height:1.7; margin-top:3px; }
+.dossier-achievement ol { list-style:none; padding:0; margin:0 0 0 auto; display:flex; gap:14px; flex:none; color:#b1e9da; font:9px Consolas,monospace; }
+.dossier-achievement li::before { content:'✓ '; color:#7fe3c6; }
+.dossier-layout { grid-template-columns:minmax(0,1.6fr) minmax(260px,1fr); gap:30px; padding:25px 32px; }
+.dossier-context section + section { margin-top:21px; }
+.dossier-context h3,.dossier-sidebar section h3 { font:500 13px var(--sans); letter-spacing:.01em; margin:0 0 11px; color:#e3f0fb; }
+.dossier-context h3 > span { margin-right:10px; font:9px Consolas,monospace; color:#8be3d2; }
+.dossier-context section p,.dossier-sidebar section p { font-size:12px; color:#b1c5db; line-height:1.85; }
+.dossier-context .dossier-concept { color:#7e9bb6; font-size:10px; line-height:1.8; margin-top:21px; }
+.project-dossier .dossier-sidebar { display:block; padding-left:26px; }
+.dossier-sidebar section + section { margin-top:23px; }
+.dossier-sidebar .tags { gap:6px; margin:0; }
+.game-body .dossier-sidebar .tags li { background:#162c43; color:#bce5e8; border-color:#38536b; font-size:10px; padding:5px 9px; }
+.dossier-links { display:flex; align-items:center; flex-wrap:wrap; gap:12px 25px; padding:0 32px 25px; }
+.dossier-links a { font-size:11px; color:#aee7de; min-height:44px; display:inline-flex; align-items:center; gap:9px; }
+.dossier-links .button-dark { color:#08202c; }
+.project-dossier .mission-footer { padding:17px 32px; background:#0b1a2e; }
+.project-dossier .mission-footer p { font:11px var(--sans); color:#91aac2; }
+@media(max-width:800px) {
+ .dossier-achievement { flex-wrap:wrap; }.dossier-achievement ol { width:100%; margin:3px 0 0 40px; flex-wrap:wrap; }
+ .dossier-layout { grid-template-columns:1fr; }.project-dossier .dossier-sidebar { padding:22px 0 0; border-left:0; border-top:1px solid #304a63; }
+}
+@media(max-width:650px) {
+ .project-dossier { width:calc(100% - 22px); max-height:calc(100dvh - 24px); }
+ .project-dossier .mission-toolbar { padding:7px 17px; }.project-dossier .mission-toolbar > .eyebrow { font-size:8px; max-width:190px; }
+ .dossier-heading { padding:23px 21px 19px; }.dossier-heading h2 { font-size:30px; }.dossier-heading > p:last-child { font-size:12px; }
+ .dossier-achievement { margin:0 21px; padding:13px; gap:11px; }.dossier-achievement > div { flex:1; min-width:0; }.dossier-achievement ol { margin-left:0; gap:10px; font-size:8px; }
+ .dossier-layout { padding:23px 21px; gap:23px; }.dossier-links { padding:0 21px 23px; gap:6px 19px; }.dossier-links > .button { width:100%; justify-content:space-between; }
+ .project-dossier .mission-footer { padding:16px 21px; }.project-dossier .mission-footer > button { width:100%; justify-content:space-between; }
+}
