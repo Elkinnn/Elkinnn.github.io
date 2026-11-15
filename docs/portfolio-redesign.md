@@ -1,6 +1,6 @@
 # Portfolio redesign — November 2026
 
-A complete portfolio-only redesign: a large gradient name and human portrait, fixed glass navigation, responsive bento projects, AMBACAR timeline, secondary portrait, technology marquee, toolkit areas, credential cards, an animated Orbital invitation and a contact footer. All dedicated pages share the same typography, components and theme tokens. Concept artwork is explicitly identified as illustration, rather than product screenshots.
+A complete portfolio-only redesign: a large gradient name and human portrait, fixed glass navigation, responsive bento projects, AMBACAR timeline, secondary portrait, technology marquee, toolkit areas, credential cards, an Orbital invitation with an actual in-game cover and a contact footer. All dedicated pages share the same typography, components and theme tokens. Concept artwork is explicitly identified as illustration, rather than product screenshots.
 
 ## Design and behavior
 
@@ -47,3 +47,7 @@ This is a local preview, not a deployment. Deployed-domain and physical-device c
 ## Orbital follow-up — 14 November 2026
 
 The protected-game restriction was explicitly lifted by the user after the portfolio redesign. The earlier verification above records that release, not the current game integration. Orbital now shares the local fonts, theme tokens and EN/ES preferences, while its movement/combat/progression models and difficulty are preserved. See [the pre-change audit](orbital-audit-2026-11-14.md) and [integration review](orbital-integration.md). The current suite includes 43 tests.
+
+## Orbital invitation cover
+
+The previous EL orbit motif was replaced with a real capture of the original game world, without its HUD. Its frame, typography, violet accents and metadata match the portfolio. The 640/1280 px WebP source selection is lazy-loaded and has reserved dimensions, with EN/ES image alternatives and captions. The original capture and reproducible exports are documented in assets/orbital/README.md. The cover is static; entering the game remains an explicit action through its image or CTA.
