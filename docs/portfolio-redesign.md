@@ -4,7 +4,7 @@ A complete portfolio-only redesign: a large gradient name and human portrait, fi
 
 ## Design and behavior
 
-- Semantic light/dark tokens for backgrounds, surfaces, text, borders, accents, gradients, radii and shadows in `styles/portfolio.css`. The dark portrait halos stay luminous against dark clothing.
+- Semantic light/dark tokens for backgrounds, surfaces, text, borders, accents, gradients, radii and shadows now live in shared `styles/design-tokens.css`; portfolio layouts remain in `styles/portfolio.css`. The dark portrait halos stay luminous against dark clothing.
 - Local Space Grotesk, Inter and JetBrains Mono with OFL licenses; consistent inline SVG interface icons in `tools/icons.mjs`.
 - Both themes work on Home, Work, About, Toolkit, Contact, three project studies and 404.
 - EN/ES links preserve the current page. Static English routes and equivalent `/es/` routes provide translated visible content, accessibility labels, placeholders, metadata and project notes. Source dictionaries: `content/translations/es.json` (normalized English keys), `content/translations/invariants.json` (explicit names/brands), `content/ui.json` (dynamic messages and phrases). The build fails for missing Spanish content; see `tools/i18n.mjs`.
@@ -43,3 +43,7 @@ To add a translation, add the normalized English key and its natural Spanish val
 - Protected-file SHA-256 comparison confirms all 28 protected files are unchanged and includes all game assets/scripts/pages, all shared/game CSS, the original CV photo and PDF. Orbital was not redesigned; its existing behavior remains covered by its 32 tests and unchanged files.
 
 This is a local preview, not a deployment. Deployed-domain and physical-device checks remain part of publication.
+
+## Orbital follow-up — 14 November 2026
+
+The protected-game restriction was explicitly lifted by the user after the portfolio redesign. The earlier verification above records that release, not the current game integration. Orbital now shares the local fonts, theme tokens and EN/ES preferences, while its movement/combat/progression models and difficulty are preserved. See [the pre-change audit](orbital-audit-2026-11-14.md) and [integration review](orbital-integration.md). The current suite includes 43 tests.

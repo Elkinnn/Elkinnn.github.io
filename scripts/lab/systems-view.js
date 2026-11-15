@@ -28,7 +28,7 @@ export class SystemsView {
    const field=new THREE.Group();w.scene.add(field);
    const plane=new THREE.Mesh(new THREE.PlaneGeometry(11.8,2.8),new THREE.MeshBasicMaterial({color:0xff985e,transparent:true,opacity:.12,side:THREE.DoubleSide,depthWrite:false}));plane.position.set(23,1.5,z);field.add(plane);
    for(let y=.2;y<=3;y+=.4){const bar=w.cube(11.7,.035,.05,23,y,z,0xff9a62,field);bar.material=w.luminous(0xff9a62,.8);}
-   const locked=w.sign('BARRIER / '+gate.id.slice(-2),'ACTIVATE '+gate.relay.toUpperCase(),1.6,18.4,3.15,z);
+   const locked=w.sign('BARRIER / '+gate.id.slice(-2),'ACTIVATE '+gate.relay.replace('-',' ').toUpperCase(),1.6,18.4,3.15,z);
    const open=w.sign('PASSAGE OPEN','CHECKPOINT SAVED',1.6,18.4,3.15,z);open.visible=false;this.gates.push({gate,field,locked,open});
   }
   w.cube(2,1.15,.85,26,.6,-12.35,0x243f58);w.cube(2.1,.08,1,26,1.22,-12.35,0x5a7f92);

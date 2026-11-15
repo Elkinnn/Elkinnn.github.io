@@ -1,3 +1,5 @@
+import {preferences,subscribeSettings,applySettings} from './runtime.js';
+import {ActiveClock} from './preferences.js';
 import {STATIONS,CARGO,CONNECTIONS,connectPorts,readProgress,saveProgress} from './gameplay.js';
 import {readFieldRun,saveFieldRun,freshFieldRun} from './field-model.js';
 import {readSystemsRun,saveSystemsRun,freshSystemsRun,BLASTER_RANGE} from './systems-mission.js';
@@ -5,6 +7,8 @@ import {emptyExpedition,advanceExpedition,readExpedition,saveExpedition,nextObje
 const $=selector=>document.querySelector(selector);
 const mission=$('#systems-dialog'),entry=$('#entry-dialog'),aiDialog=$('#ai-dialog');
 const dialogs=[...document.querySelectorAll('dialog')];
+const scanClock=new ActiveClock(performance.now());
+let suspended=false,unavailable=false,focusBeforePause=null;
 let scene,nearTarget=null,selectedPort=null,connections=[],completed=false,started=false,messageTimer;
 let storage;try{storage=window.localStorage;}catch{storage=null;}
 let fieldSaved={interfaces:readFieldRun(storage,'interfaces'),ai:readFieldRun(storage,'ai')},selectedField='interfaces',fieldHudKey='';
@@ -12,24 +16,24 @@ let systemsSaved=readSystemsRun(storage),missionPractice=false,sectorHudKey="";
 let expedition=readExpedition(storage,readProgress(storage));completed=expedition.missions.includes('systems');
 if(completed)connections=CONNECTIONS.map(edge=>edge.id);
 let interfaceSequence=expedition.missions.includes('interfaces')?[...INTERFACE_SEQUENCE]:[];
-let scanHits=expedition.missions.includes('ai')?3:0,scanStart=0,scanFrame=0,scanPosition=0,scanAssisted=matchMedia('(prefers-reduced-motion:reduce)').matches;
+let scanHits=expedition.missions.includes('ai')?3:0,scanFrame=0,scanPosition=0,scanAssisted=preferences.reducedMotion;
 function message(text){clearTimeout(messageTimer);$('#lab-message').textContent=text;messageTimer=setTimeout(()=>$('#lab-message').textContent='',4800);}
 function updateProgress(){
-  $('#lab-progress').textContent=expedition.launched?'NETWORK ONLINE ✓':'SIGNALS '+expedition.cells.length+'/3 · MODULES '+expedition.missions.length+'/3';
+  $('#lab-progress').textContent=expedition.launched?'NETWORK ONLINE ✓':'GOLDEN SIGNALS '+expedition.cells.length+'/3 · MODULES '+expedition.missions.length+'/3';
   $('#objective-label').textContent=nextObjective(expedition).label;
-  $('#map-progress').textContent=expedition.cells.length+'/3 signals recovered · '+expedition.missions.length+'/3 modules restored'+(expedition.launched?' · Network online':'');
+  $('#map-progress').textContent=expedition.cells.length+'/3 golden signals recovered · '+expedition.missions.length+'/3 modules restored'+(expedition.launched?' · Network online':'');
   for(const cargo of CARGO){const button=$('[data-walk="'+cargo.id+'"]'),found=expedition.cells.includes(cargo.id);button.disabled=found;button.textContent=cargo.name+(found?' ✓':' ↗');}
   for(const station of STATIONS)$('.map-destinations [data-walk="'+station.id+'"]').classList.toggle('is-complete',expedition.missions.includes(station.id));
   $('#label-systems').classList.toggle('is-complete',completed);scene?.setProgress(expedition);
 }
 function advance(kind,id){expedition=advanceExpedition(expedition,kind,id);saveExpedition(storage,expedition);updateProgress();}
 function completeMission(id){const fresh=!expedition.missions.includes(id);advance('mission',id);if(fresh)message(STATIONS.find(s=>s.id===id).name+' restored. Return to the Nexus when all signals and modules are ready.');}
-function syncPause(){const paused=!started||dialogs.some(d=>d.open);scene?.setPaused(paused);if(!paused)scene?.focus();}
+function syncPause(){const paused=unavailable||suspended||document.hidden||!started||dialogs.some(d=>d.open);scene?.setPaused(paused);if(!paused)scene?.focus();}
 function closeOverlays(){for(const dialog of dialogs)if(dialog.open)dialog.close();}
 function openOverlay(dialog){if(dialog.open)return;closeOverlays();scene?.setPaused(true);dialog.showModal();}
 for(const dialog of dialogs){
  dialog.addEventListener('close',()=>{if(dialog===aiDialog)cancelAnimationFrame(scanFrame);syncPause();});
- dialog.addEventListener('click',event=>{const r=dialog.getBoundingClientRect();if(dialog!==entry&&event.target===dialog&&(event.clientX<r.left||event.clientX>r.right||event.clientY<r.top||event.clientY>r.bottom))dialog.close();});
+ dialog.addEventListener('click',event=>{const r=dialog.getBoundingClientRect();if(dialog!==entry&&dialog.id!=='focus-dialog'&&event.target===dialog&&(event.clientX<r.left||event.clientX>r.right||event.clientY<r.top||event.clientY>r.bottom))dialog.close();});
 }
 entry.addEventListener('cancel',event=>event.preventDefault());
 $('#enter-world').addEventListener('click',()=>{started=true;entry.close();scene?.setStarted();message(expedition.launched?'Network remains online. Explore the modules, or restart from Menu.':'Recover the golden signals with a jump. Press Q for a thruster impulse. Map can guide you.');});
@@ -86,16 +90,16 @@ function openProjectDossier(kind){
  $('#project-dossier .dialog-close').focus({preventScroll:true});
 }
 function fieldComplete(kind){completeMission(kind);openProjectDossier(kind);}
-function practiceField(kind){if(kind==='interfaces'){interfaceSequence=[];renderInterface();openOverlay($('#interfaces-dialog'));}else{scanHits=0;scanPosition=0;openOverlay(aiDialog);scanStart=performance.now();$('#scanner-assist').checked=scanAssisted;$('#step-scanner').hidden=!scanAssisted;$('#scan-feedback').textContent='Timing practice. Field-mission progress is unchanged.';cancelAnimationFrame(scanFrame);scanLoop();}}
+function practiceField(kind){if(kind==='interfaces'){interfaceSequence=[];renderInterface();openOverlay($('#interfaces-dialog'));}else{scanHits=0;scanPosition=0;openOverlay(aiDialog);scanClock.reset(performance.now());$('#scanner-assist').checked=scanAssisted;$('#step-scanner').hidden=!scanAssisted;$('#scan-feedback').textContent='Timing practice. Field-mission progress is unchanged.';cancelAnimationFrame(scanFrame);scanLoop();}}
 document.querySelectorAll('[data-practice]').forEach(button=>button.addEventListener('click',()=>button.dataset.practice==='systems'?openMission(true):practiceField(button.dataset.practice)));
 function renderField(data,position){
  const meta=FIELD_META[data.kind],run=data.run,signature=[data.kind,run.stage,run.calibrated,run.captures.length,run.completed,data.health,data.assist,data.channel>0,data.aim?.name||''].join('|');
- if(signature!==fieldHudKey){fieldHudKey=signature;sectorHudKey='';document.querySelector('.game-world').classList.remove('systems-active');document.querySelector('.game-world').classList.add('field-active');document.querySelector('.game-world').classList.toggle('field-courier',data.kind==='interfaces');document.querySelector('.game-world').classList.toggle('field-scanner',data.kind==='ai');$('#systems-hud').hidden=true;$('#systems-aim').hidden=true;document.querySelector('.game-objective').hidden=true;$('#field-hud').hidden=false;$('#field-kicker').textContent=meta.category+' · '+meta.title.toUpperCase();$('#field-objective').textContent=data.objective.label;$('#field-count').textContent=data.kind==='interfaces'?'Route '+run.stage+'/3':'Samples '+run.captures.length+'/3';$('#field-health').textContent=data.assist?'Assist enabled':(data.kind==='interfaces'?'Signal ':'Shield ')+data.health+'/3';$('#field-detail').textContent=data.kind==='interfaces'?(run.completed?'Alert delivered':run.stage?'Packet: observation aboard':'Demo case: repeated absence'):(run.completed?'Analysis synchronized':run.captures.length===3?'3 samples confirmed · uplink ready':run.calibrated?'Scanner ready · 4.5 m range':'Scanner: calibration required');$('#field-hint').textContent=run.completed?'Press E at the terminal to reopen the project dossier.':data.channel>0?'Stay beside the uplink to finish transmitting.':data.aim?'Hold F / SCAN · '+data.aim.name:data.kind==='ai'?(run.captures.length===3?'Press E at the analysis uplink, then stay close.':run.calibrated?'Hold SCAN on a visible nearby sample.':'Press E at the calibration console.'):'Use E at the current route station.';$('#guide-field').disabled=run.completed;
-  $('#fire-blaster').hidden=data.kind!=='ai'||!run.calibrated||run.captures.length===3||run.completed;$('#fire-blaster').setAttribute('aria-label','Hold scanner');$('#fire-blaster small').textContent='SCAN / HOLD';
+ if(signature!==fieldHudKey){fieldHudKey=signature;sectorHudKey='';document.querySelector('.game-world').classList.remove('systems-active');document.querySelector('.game-world').classList.add('field-active');document.querySelector('.game-world').classList.toggle('field-courier',data.kind==='interfaces');document.querySelector('.game-world').classList.toggle('field-scanner',data.kind==='ai');$('#systems-hud').hidden=true;$('#systems-aim').hidden=true;document.querySelector('.game-objective').hidden=true;$('#field-hud').hidden=false;$('#field-kicker').textContent=meta.category+' · '+meta.title.toUpperCase();$('#field-objective').textContent=data.objective.label;$('#field-count').textContent=data.kind==='interfaces'?'Route '+run.stage+'/3':'Samples '+run.captures.length+'/3';$('#field-health').textContent=data.assist?'Assist enabled':(data.kind==='interfaces'?'Integrity ':'Shield ')+data.health+'/3';$('#field-detail').textContent=data.kind==='interfaces'?(run.completed?'Alert delivered':run.stage?'Packet: observation aboard':'Demo case: repeated absence'):(run.completed?'Analysis synchronized':run.captures.length===3?'3 samples confirmed · uplink ready':run.calibrated?'Scanner ready · 4.5 m range':'Scanner: calibration required');$('#field-hint').textContent=run.completed?'Press E at the terminal to reopen the project dossier.':data.channel>0?'Stay beside the uplink to finish transmitting.':data.aim?'Hold F / SCAN · '+data.aim.name:data.kind==='ai'?(run.captures.length===3?'Press E at the analysis uplink, then stay close.':run.calibrated?'Hold SCAN on a visible nearby sample.':'Press E at the calibration console.'):'Use E at the current route station.';$('#guide-field').disabled=run.completed;
+  $('#fire-blaster').hidden=data.kind!=='ai'||!run.calibrated||run.captures.length===3||run.completed;$('#fire-blaster').setAttribute('aria-label','Hold scanner');$('#fire-blaster small').textContent='Hold to scan';
  }
  $('#field-distance').textContent=Math.round(Math.hypot(position.x-data.objective.point.x,position.z-data.objective.point.z))+' m';const progress=Math.min(1,data.channel||data.scan||0);$('#field-meter i').style.width=progress*100+'%';$('#field-meter').setAttribute('aria-valuenow',Math.round(progress*100));const aim=$('#field-aim');aim.hidden=!data.aim?.visible;if(!aim.hidden){aim.style.left=data.aim.x+'px';aim.style.top=data.aim.y+'px';aim.querySelector('span').textContent=data.aim.name;}
 }
-function renderMissionHUD(projection){if(projection.field.active){renderField(projection.field,projection.position);return;}if(fieldHudKey){fieldHudKey='';document.querySelector('.game-world').classList.remove('field-active','field-courier','field-scanner');$('#field-hud').hidden=true;$('#field-aim').hidden=true;$('#fire-blaster').setAttribute('aria-label','Fire energy blaster');$('#fire-blaster small').textContent='FIRE / F';sectorHudKey='';}renderSector(projection.systems,projection.position);}
+function renderMissionHUD(projection){if(projection.field.active){renderField(projection.field,projection.position);return;}if(fieldHudKey){fieldHudKey='';document.querySelector('.game-world').classList.remove('field-active','field-courier','field-scanner');$('#field-hud').hidden=true;$('#field-aim').hidden=true;$('#fire-blaster').setAttribute('aria-label','Fire energy blaster');$('#fire-blaster small').textContent='Fire';sectorHudKey='';}renderSector(projection.systems,projection.position);}
 function renderInterface(){
  const solved=interfaceSequence.length===3;
  [...$('#alert-route').children].forEach((step,i)=>step.classList.toggle('is-active',i<interfaceSequence.length));
@@ -106,12 +110,12 @@ function paintScanner(){
  $('#scan-cursor').style.left=(scanPosition*100)+'%';$('#scan-reading').textContent=Math.round(scanPosition*100)+'%';$('#scan-meter').setAttribute('aria-valuenow',Math.round(scanPosition*100));
  [...$('#scan-locks').children].forEach((lock,i)=>lock.classList.toggle('is-active',i<scanHits));$('#capture-signal').disabled=scanHits===3;
 }
-function scanLoop(){if(!aiDialog.open)return;if(!scanAssisted)scanPosition=scannerPosition((performance.now()-scanStart)/1000);paintScanner();scanFrame=requestAnimationFrame(scanLoop);}
+function scanLoop(){if(!aiDialog.open)return;if(!scanAssisted)scanPosition=scannerPosition(scanClock.seconds(performance.now()));paintScanner();scanFrame=requestAnimationFrame(scanLoop);}
 function openStation(id){
  if(id.endsWith('-project')){openProjectDossier(id.replace('-project',''));return;}
  if(id==='nexus'){
   if(expedition.launched){openOverlay($('#completion-dialog'));return;}
-  if(!readyToLaunch(expedition)){message('Nexus standby: recover all 3 signals and restore all 3 modules. Check your mission map.');return;}
+  if(!readyToLaunch(expedition)){message('Nexus standby: recover all 3 golden signals and restore all 3 modules. Check your mission map.');return;}
   advance('launch');openOverlay($('#completion-dialog'));return;
  }
  if(id==='systems'){openSystemsBriefing();return;}
@@ -142,17 +146,17 @@ document.querySelectorAll('[data-direction]').forEach(button=>{
  button.addEventListener('click',event=>{if(event.detail===0){press();setTimeout(release,180);}});
 });
 document.querySelectorAll('[data-route]').forEach(button=>button.addEventListener('click',()=>{
- const next=routeInterface(interfaceSequence,button.dataset.route),wrong=next.length===0;interfaceSequence=next;renderInterface();if(wrong)$('#interface-feedback').textContent='Route interrupted. Start by observing, then evaluate before notifying.';if(interfaceSequence.length===3)$('#interface-feedback').textContent='Sequence practice complete. Finish Alert Courier to restore the module.';
+ const next=routeInterface(interfaceSequence,button.dataset.route),wrong=next.length===0;interfaceSequence=next;renderInterface();if(wrong)$('#interface-feedback').textContent='Route interrupted. Start by observing, then evaluate before notifying.';if(interfaceSequence.length===3)$('#interface-feedback').textContent='Sequence practice complete. Field-mission progress is unchanged.';
 }));
 $('#replay-interface').addEventListener('click',()=>{interfaceSequence=[];renderInterface();});
-$('#scanner-assist').addEventListener('change',()=>{scanAssisted=$('#scanner-assist').checked;$('#step-scanner').hidden=!scanAssisted;scanPosition=0;scanStart=performance.now();paintScanner();});
+$('#scanner-assist').addEventListener('change',()=>{scanAssisted=$('#scanner-assist').checked;$('#step-scanner').hidden=!scanAssisted;scanPosition=0;scanClock.reset(performance.now());paintScanner();});
 $('#step-scanner').addEventListener('click',()=>{scanPosition=scanPosition>=1?0:Math.round((scanPosition+.1)*10)/10;paintScanner();});
 $('#capture-signal').addEventListener('click',()=>{
- if(!scanAssisted)scanPosition=scannerPosition((performance.now()-scanStart)/1000);const result=captureSignal(scanHits,scanPosition);scanHits=result.hits;paintScanner();
+ if(!scanAssisted)scanPosition=scannerPosition(scanClock.seconds(performance.now()));const result=captureSignal(scanHits,scanPosition);scanHits=result.hits;paintScanner();
  $('#scan-feedback').textContent=scanHits===3?'Three frames locked. Applied AI module restored.':result.hit?'Frame locked. '+scanHits+'/3 captured.':'Outside the target zone. Previous locks kept; try again.';
- if(scanHits===3)$('#scan-feedback').textContent='Timing practice complete. Finish Signal Hunt to restore the module.';
+ if(scanHits===3)$('#scan-feedback').textContent='Timing practice complete. Field-mission progress is unchanged.';
 });
-$('#replay-scan').addEventListener('click',()=>{scanHits=0;scanPosition=0;scanStart=performance.now();paintScanner();$('#scan-feedback').textContent='New scan. Capture three frames inside the cyan zone.';});
+$('#replay-scan').addEventListener('click',()=>{scanHits=0;scanPosition=0;scanClock.reset(performance.now());paintScanner();$('#scan-feedback').textContent='New scan. Capture three frames inside the cyan zone.';});
 function updateWires() {
   if(!mission.open)return;
   const board=$('#connection-board'),rect=board.getBoundingClientRect();
@@ -170,7 +174,7 @@ function updateWires() {
 function renderMission() {
   const solved=connections.length===2;
   $('#connection-count').textContent=connections.length+' / 2 connected';
-  $('#mission-success').hidden=!solved;mission.classList.toggle('is-solved',solved);$('#mission-success p').textContent=missionPractice?'Wiring practice complete. Enter the sector to finish the field mission.':'Systems field mission complete. Explore the project behind it.';
+  $('#mission-success').hidden=!solved;mission.classList.toggle('is-solved',solved);$('#mission-success p').textContent=missionPractice?'Wiring practice complete. Field-mission progress is unchanged.':'Systems field mission complete. Explore the project behind it.';
   document.querySelectorAll('[data-port]').forEach(port=>{
     port.setAttribute('aria-pressed',String(port.id===selectedPort));
     port.classList.toggle('is-connected',CONNECTIONS.some(edge=>connections.includes(edge.id)&&edge.ports.includes(port.id)));
@@ -185,7 +189,7 @@ document.querySelectorAll('[data-port]').forEach(port=>port.addEventListener('cl
   const result=connectPorts(connections,selectedPort,id);selectedPort=null;
   if(result.ok) {
     connections=result.connections;
-    if(connections.length===2){if(!missionPractice&&scene?.finishSystems()){completed=true;saveProgress(storage);completeMission('systems');showDossier=true;$('#connection-status').textContent='System connected. Systems sector restored.';$('#continue-exploring').textContent='Return to orbit →';}else $('#connection-status').textContent='Practice connected. Enter the Systems sector to complete the field mission.';}
+    if(connections.length===2){if(!missionPractice&&scene?.finishSystems()){completed=true;saveProgress(storage);completeMission('systems');showDossier=true;$('#connection-status').textContent='System connected. Systems sector restored.';$('#continue-exploring').textContent='Return to orbit →';}else $('#connection-status').textContent='Wiring practice complete. Field-mission progress is unchanged.';}
     else $('#connection-status').textContent=result.duplicate?'That connection is already in place.':'Connection made. Connect the remaining pair.';
   } else $('#connection-status').textContent=result.reason;
   renderMission();
@@ -194,15 +198,35 @@ document.querySelectorAll('[data-port]').forEach(port=>port.addEventListener('cl
 $('#reset-puzzle').addEventListener('click',()=>{connections=[];selectedPort=null;renderMission();$('#connection-status').textContent='Puzzle reset. Reconnect the browser, API and database.';});
 new ResizeObserver(updateWires).observe($('#connection-board'));
 
-function fallback(){closeOverlays();scene?.setPaused(true);$('#lab-loading').hidden=true;$('#lab-fallback').hidden=false;$('#world-labels').hidden=true;document.querySelector('.game-objective').hidden=true;message('The Systems challenge and project pages are available without the 3D world.');}
+function fallback(reason){suspended=false;scanClock.resume(performance.now());unavailable=true;document.body.classList.add('orbital-unavailable');closeOverlays();scene?.setPaused(true);scene?.suspendRendering();if(reason==='choice')$('#fallback-description').textContent='Explore the projects and connection practice without the 3D view. Your confirmed progress is kept.';$('#lab-loading').hidden=true;$('#lab-fallback').hidden=false;$('#lab-fallback').setAttribute('tabindex','-1');$('#lab-fallback').focus({preventScroll:true});$('#world-labels').hidden=true;document.querySelector('.game-objective').hidden=true;message('The Systems challenge and project pages are available without the 3D world.');}
+// Settings update presentation only: no mission state, rates, ranges or damage rules change.
+subscribeSettings(settings=>{scene?.applyPreferences(settings);sectorHudKey='';fieldHudKey='';});
+$('#open-settings').addEventListener('click',()=>openOverlay($('#settings-dialog')));
+$('#open-accessible-view').addEventListener('click',()=>fallback('choice'));
+$('#retry-world').addEventListener('click',()=>location.reload());
+$('#try-low-quality').addEventListener('click',()=>{applySettings({quality:'low'});$('#performance-dialog').close();syncPause();});
+function pauseAway(){
+ if(suspended||!started&&!mission.open&&!aiDialog.open&&!$('#interfaces-dialog').open)return;
+ suspended=true;focusBeforePause=document.activeElement;scanClock.pause(performance.now());scene?.setPaused(true);
+ // Keep the underlying practice/dialog open so its state and keyboard focus are retained.
+ if(!$('#focus-dialog').open)$('#focus-dialog').showModal();
+}
+function resumeFocus(){suspended=false;scanClock.resume(performance.now());$('#focus-dialog').close();syncPause();if(focusBeforePause?.isConnected)focusBeforePause.focus({preventScroll:true});}
+$('#resume-focus').addEventListener('click',resumeFocus);
+$('#focus-dialog').addEventListener('cancel',event=>{event.preventDefault();resumeFocus()});
+window.addEventListener('blur',pauseAway);
+document.addEventListener('visibilitychange',()=>{if(document.hidden)pauseAway()});
+
 updateProgress();entry.showModal();
+const loadingTimeout=setTimeout(()=>{if(!scene)fallback()},20000);
 try{
+ await Promise.all([document.fonts.load('600 32px Space'),document.fonts.load('400 16px Inter'),document.fonts.load('400 16px JetBrains')]);
  const {LabScene}=await import('/assets/lab/scene.js');
  scene=new LabScene($('#lab-canvas'),{
-  fieldRuns:fieldSaved,onFieldSave:(kind,run)=>{fieldSaved[kind]={...run,captures:[...run.captures]};saveFieldRun(storage,kind,run);},onFieldComplete:fieldComplete,
+  settings:preferences,onPerformanceIssue:()=>{if(!suspended)openOverlay($('#performance-dialog'));},onQualityChange:quality=>{$('#quality-status').textContent='Current rendering: '+quality+'. Missions and timing are unchanged.';},fieldRuns:fieldSaved,onFieldSave:(kind,run)=>{fieldSaved[kind]={...run,captures:[...run.captures]};saveFieldRun(storage,kind,run);},onFieldComplete:fieldComplete,
   systemsRun:systemsSaved,onSystemsSave:run=>{systemsSaved={...run,relays:[...run.relays]};saveSystemsRun(storage,run);},
   onMessage:message,onInteract:openStation,onFailure:fallback,onCameraChange:cameraChanged,
-  onCollect:id=>{advance('cell',id);message('Signal recovered. '+expedition.cells.length+'/3 aboard. '+(expedition.cells.length===3?'Restore the modules, then return to the Nexus.':'Follow the next flight-plan marker.'));},
+  onCollect:id=>{advance('cell',id);message('Golden signal recovered. '+expedition.cells.length+'/3 aboard. '+(expedition.cells.length===3?'Restore the modules, then return to the Nexus.':'Follow the next flight-plan marker.'));},
   onState:state=>{
    nearTarget=state.target;$('#world-interact').hidden=!nearTarget;
    if(nearTarget)$('#world-interact span').textContent=nearTarget.kind==='cargo'?'Jump to recover '+nearTarget.name:nearTarget.kind==='field'||nearTarget.kind==='project'?nearTarget.name:nearTarget.kind==='terminal'?'Connect the Systems terminal':nearTarget.kind==='nexus'?(expedition.launched?'View expedition result':readyToLaunch(expedition)?'Activate the Nexus':'Check Nexus status'):'Open '+nearTarget.name+' challenge';
@@ -216,6 +240,6 @@ try{
    $('#touch-boost').classList.toggle('is-recharging',projection.dashReady<1);renderMissionHUD(projection);
   }
  });
- scene.setProgress(expedition);$('#start-systems').disabled=false;$('#start-field').disabled=false;$('#lab-loading').hidden=true;$('#enter-world').disabled=false;$('#enter-world').textContent='Launch expedition →';if(entry.open)$('#enter-world').focus({preventScroll:true});
+ clearTimeout(loadingTimeout);scene.applyPreferences(preferences);scene.setProgress(expedition);if(unavailable)scene.suspendRendering();$('#start-systems').disabled=false;$('#start-field').disabled=false;$('#lab-loading').hidden=true;$('#enter-world').disabled=false;$('#enter-world').textContent=expedition.launched?'Revisit Orbital →':expedition.cells.length||expedition.missions.length?'Continue expedition →':'Launch expedition →';if(entry.open)$('#enter-world').focus({preventScroll:true});
  window.addEventListener('pagehide',event=>event.persisted?scene?.setPaused(true):scene?.dispose());window.addEventListener('pageshow',event=>{if(event.persisted)syncPause();});
-}catch(error){console.error('The orbital world could not start.',error);fallback();}
+}catch(error){clearTimeout(loadingTimeout);console.warn('Orbital 3D unavailable:',error.message);fallback();}

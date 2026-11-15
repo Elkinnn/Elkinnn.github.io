@@ -1,0 +1,6 @@
+/* Shared portfolio and Orbital identity: local fonts and semantic theme tokens. */
+@font-face{font-family:Inter;src:url('/assets/fonts/inter.woff2') format('woff2');font-weight:100 900;font-display:swap}
+@font-face{font-family:Space;src:url('/assets/fonts/space-grotesk.woff2') format('woff2');font-weight:300 700;font-display:swap}
+@font-face{font-family:JetBrains;src:url('/assets/fonts/jetbrains-mono.woff2') format('woff2');font-weight:100 800;font-display:swap}
+:root{color-scheme:light;--bg:#f7f8fc;--surface:#fff;--surface-2:#eef1fa;--surface-3:#e5eafa;--text:#18223c;--secondary:#55627d;--border:#dce2ef;--accent:#4e49d8;--cyan:#006e88;--rose:#a73d73;--glass:#ffffffd9;--gradient:linear-gradient(115deg,#454cdb,#7751d1 57%,#ac437b);--halo:linear-gradient(140deg,#c2ceff,#d9d3fa 52%,#f5d6e7);--shadow:0 18px 55px #2432670b;--shadow-hover:0 24px 60px #343d8120;--r:24px;--r-sm:14px;--space:clamp(72px,8vw,120px)}
+:root[data-theme=dark]{color-scheme:dark;--bg:#0b1021;--surface:#141c32;--surface-2:#19233c;--surface-3:#212d49;--text:#eff2fc;--secondary:#a9b5cf;--border:#2a3652;--accent:#b5a8ff;--cyan:#80d9ef;--rose:#f7a4cd;--glass:#141c32eb;--gradient:linear-gradient(115deg,#94b8ff,#c1a4ff 57%,#f7a5cb);--halo:linear-gradient(140deg,#a2b8f1,#afa1d0 52%,#d6a6be);--shadow:0 18px 55px #0002;--shadow-hover:0 24px 60px #0005}

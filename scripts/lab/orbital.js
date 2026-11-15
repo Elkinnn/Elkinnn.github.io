@@ -1,3 +1,4 @@
+import {graphicsPreset,FrameBudget} from './preferences.js';
 import * as THREE from 'three';
 import {OrbitalWorld} from './orbital-world.js';
 import {emptyExpedition} from './expedition.js';
@@ -17,21 +18,29 @@ export class LabScene extends OrbitalWorld {
     this.canvas=canvas;this.callbacks=callbacks;this.position={...SPAWN};this.keys=new Set();this.path=[];
     this.yaw=0;this.pitch=.27;this.distance=5.6;this.mode='third';this.paused=true;this.started=false;
     this.fields=Object.fromEntries(['interfaces','ai'].map(kind=>[kind,new FieldMission(kind,callbacks.fieldRuns?.[kind])]));this.field=null;this.scanLatch=null;this.systems=new SystemsMission(callbacks.systemsRun);this.progress=emptyExpedition();this.dashTime=0;this.dashCooldown=0;this.last=0;this.walkPhase=0;this.jump={height:0,velocity:0};this.lastState='';this.materials=new Map();
-    this.reduced=matchMedia('(prefers-reduced-motion:reduce)').matches;this.events=new AbortController();
+    this.reduced=callbacks.settings?.reducedMotion??matchMedia('(prefers-reduced-motion:reduce)').matches;this.budget=new FrameBudget();this.autoLowered=false;this.events=new AbortController();
     this.renderer=new THREE.WebGLRenderer({canvas,antialias:true,powerPreference:'high-performance'});
     this.renderer.setPixelRatio(Math.min(devicePixelRatio,1.6));this.renderer.shadowMap.enabled=true;this.renderer.shadowMap.type=THREE.PCFShadowMap;
     this.renderer.toneMapping=THREE.ACESFilmicToneMapping;this.renderer.toneMappingExposure=1;
     this.scene=new THREE.Scene();this.scene.fog=new THREE.Fog(0x050c20,65,190);
     this.camera=new THREE.PerspectiveCamera(62,1,.08,220);this.cameraPosition=new THREE.Vector3();this.cameraTarget=new THREE.Vector3();
-    this.scene.add(new THREE.HemisphereLight(0xa9cfff,0x122344,2));
+    this.hemi=new THREE.HemisphereLight(0xa9cfff,0x122344,2);this.scene.add(this.hemi);
     const sun=new THREE.DirectionalLight(0xddeaff,3.5);sun.position.set(-12,25,16);sun.castShadow=true;
-    sun.shadow.mapSize.set(2048,2048);Object.assign(sun.shadow.camera,{left:-50,right:50,top:50,bottom:-45,near:.5,far:130});sun.shadow.bias=-.0004;sun.shadow.normalBias=.04;this.scene.add(sun);
+    this.sun=sun;sun.shadow.mapSize.set(2048,2048);Object.assign(sun.shadow.camera,{left:-50,right:50,top:50,bottom:-45,near:.5,far:130});sun.shadow.bias=-.0004;sun.shadow.normalBias=.04;this.scene.add(sun);
     this.buildWorld();this.buildCharacter();this.systemsView=new SystemsView(this);this.fieldViews={interfaces:new FieldView(this,'interfaces'),ai:new FieldView(this,'ai')};
     this.raycaster=new THREE.Raycaster();this.floorPlane=new THREE.Plane(new THREE.Vector3(0,1,0),0);
     this.resizeObserver=new ResizeObserver(()=>this.resize());this.resizeObserver.observe(canvas.parentElement);
     this.bindControls();this.resize();this.updateCamera(1,true);
     this.renderer.setAnimationLoop(time=>this.frame(time));
   }
+  suspendRendering(){this.renderer.setAnimationLoop(null)}
+  applyPreferences(settings){this.reduced=settings.reducedMotion;this.applyQuality(settings.quality);this.setTheme(settings.theme);this.refreshLabels();}
+  applyQuality(requested='auto'){
+    if(requested!==this.qualityRequested){this.autoLowered=false;this.budget.reset()}this.qualityRequested=requested;
+    const preset=graphicsPreset(this.autoLowered&&requested==='auto'?'low':requested,{mobile:matchMedia('(pointer:coarse)').matches||innerWidth<=760,pixelRatio:devicePixelRatio});
+    const signature=JSON.stringify(preset);if(signature!==this.qualitySignature){this.qualitySignature=signature;this.renderer.setPixelRatio(preset.pixelRatio);this.renderer.shadowMap.enabled=preset.shadows;this.sun.shadow.mapSize.set(preset.shadowSize,preset.shadowSize);this.sun.shadow.map?.dispose();this.sun.shadow.map=null;this.resize()}this.effectiveQuality=preset.name;this.callbacks.onQualityChange?.(preset.name);
+  }
+  setTheme(theme){const light=theme==='light';this.scene.background.set(light?0x263751:0x0b1021);this.scene.fog.color.set(light?0x263751:0x0b1021);this.hemi.color.set(light?0xe5ecff:0xa9cfff);this.hemi.groundColor.set(light?0x243651:0x122344);this.renderer.toneMappingExposure=1;}
   resize() {
     const {width,height}=this.canvas.parentElement.getBoundingClientRect();if(!width||!height)return;
     this.width=width;this.height=height;this.renderer.setSize(width,height,false);this.camera.aspect=width/height;this.camera.updateProjectionMatrix();
@@ -56,7 +65,7 @@ export class LabScene extends OrbitalWorld {
     this.avatar.visible=this.mode!=='first'||!this.started;
   }
   setStarted() {this.started=true;this.setPaused(false);this.focus();}
-  setPaused(value) {this.paused=value;this.keys.clear();if(value){this.path=[];this.pointer=null;}}
+  setPaused(value) {this.paused=value;this.keys.clear();if(value){this.path=[];this.pointer=null;this.scanLatch=null;}}
   focus() {this.canvas.focus({preventScroll:true});}
   toggleCamera() {this.mode=this.mode==='third'?'first':'third';this.pitch=this.mode==='first'?.03:(this.systems.active||this.field)&&this.width<=650?.1:.27;this.updateCamera(1,true);this.callbacks.onCameraChange?.(this.mode);this.focus();}
   zoom(amount) {if(this.mode==='third')this.distance=clamp(this.distance-amount*4,3.2,7.5);else{this.camera.fov=clamp(this.camera.fov-amount*15,48,78);this.camera.updateProjectionMatrix();}}
@@ -131,14 +140,15 @@ export class LabScene extends OrbitalWorld {
       this.keys.add(key);if(key!=='shift')this.path=[];
     },{signal});
     window.addEventListener('keyup',event=>this.keys.delete(event.key.toLowerCase()),{signal});window.addEventListener('blur',()=>this.keys.clear(),{signal});this.canvas.addEventListener('blur',()=>this.keys.clear(),{signal});
-    this.canvas.addEventListener('pointerdown',event=>{if(this.paused||event.button>0)return;this.focus();this.pointer={x:event.clientX,y:event.clientY,lastX:event.clientX,lastY:event.clientY,dragged:false};this.canvas.setPointerCapture(event.pointerId);},{signal});
-    this.canvas.addEventListener('pointermove',event=>{if(!this.pointer)return;const p=this.pointer;if(Math.hypot(event.clientX-p.x,event.clientY-p.y)>6)p.dragged=true;if(p.dragged){this.pathLook=false;this.yaw-=(event.clientX-p.lastX)*.005;this.pitch=clamp(this.pitch+(event.clientY-p.lastY)*.003,this.mode==='first'?-.95:-.08,this.mode==='first'?.95:.65);}p.lastX=event.clientX;p.lastY=event.clientY;},{signal});
-    this.canvas.addEventListener('pointerup',event=>{const pointer=this.pointer;this.pointer=null;if(!pointer||pointer.dragged)return;if(this.systems.active||this.field?.kind==='ai'){this.shoot(event);return;}if(this.mode==='first')return;const rect=this.canvas.getBoundingClientRect();this.raycaster.setFromCamera(new THREE.Vector2((event.clientX-rect.left)/rect.width*2-1,-(event.clientY-rect.top)/rect.height*2+1),this.camera);const point=this.raycaster.ray.intersectPlane(this.floorPlane,new THREE.Vector3());if(point)this.walkToPoint({x:point.x,z:point.z});},{signal});
+    this.canvas.addEventListener('pointerdown',event=>{if(this.paused||event.button>0)return;this.focus();this.pointer={id:event.pointerId,x:event.clientX,y:event.clientY,lastX:event.clientX,lastY:event.clientY,dragged:false};this.canvas.setPointerCapture(event.pointerId);},{signal});
+    this.canvas.addEventListener('pointermove',event=>{if(!this.pointer||this.pointer.id!==event.pointerId)return;const p=this.pointer;if(Math.hypot(event.clientX-p.x,event.clientY-p.y)>6)p.dragged=true;if(p.dragged){this.pathLook=false;this.yaw-=(event.clientX-p.lastX)*.005;this.pitch=clamp(this.pitch+(event.clientY-p.lastY)*.003,this.mode==='first'?-.95:-.08,this.mode==='first'?.95:.65);}p.lastX=event.clientX;p.lastY=event.clientY;},{signal});
+    this.canvas.addEventListener('pointerup',event=>{const pointer=this.pointer;if(!pointer||pointer.id!==event.pointerId)return;this.pointer=null;if(pointer.dragged)return;if(this.systems.active||this.field?.kind==='ai'){this.shoot(event);return;}if(this.mode==='first')return;const rect=this.canvas.getBoundingClientRect();this.raycaster.setFromCamera(new THREE.Vector2((event.clientX-rect.left)/rect.width*2-1,-(event.clientY-rect.top)/rect.height*2+1),this.camera);const point=this.raycaster.ray.intersectPlane(this.floorPlane,new THREE.Vector3());if(point)this.walkToPoint({x:point.x,z:point.z});},{signal});
     this.canvas.addEventListener('pointercancel',()=>this.pointer=null,{signal});this.canvas.addEventListener('wheel',event=>{event.preventDefault();if(!this.paused)this.zoom(-Math.sign(event.deltaY)*.08);},{signal,passive:false});
     this.canvas.addEventListener('webglcontextlost',event=>{event.preventDefault();this.callbacks.onFailure?.();},{signal});
   }
   frame(time) {
-    const dt=Math.min((time-(this.last||time))/1000,.04);this.last=time;if(document.hidden)return;
+    const elapsed=time-(this.last||time),dt=Math.min(elapsed/1000,.04);this.last=time;if(document.hidden)return;
+    if(!this.paused){const action=this.budget.sample(elapsed,this.qualityRequested==='auto'&&!this.autoLowered?'auto':this.effectiveQuality);if(action==='lower'){this.autoLowered=true;this.applyQuality('auto');this.callbacks.onMessage?.('Graphics adjusted for smoother play. Mission rules are unchanged.')}if(action==='warn')this.callbacks.onPerformanceIssue?.();}
     const old={...this.position};
     if(!this.paused) {
       const dx=(this.keys.has('d')||this.keys.has('arrowright')?1:0)-(this.keys.has('a')||this.keys.has('arrowleft')?1:0);
@@ -150,7 +160,7 @@ export class LabScene extends OrbitalWorld {
       if(this.keys.has('f'))this.shoot();
       const events=this.systems.tick(dt,{...this.position,height:this.jump.height},this.getObstacles());
       for(const event of events){
-        if(event.type==='relay'){this.callbacks.onSystemsSave?.(this.systems.run);this.callbacks.onMessage?.('Relay activated. Barrier released; checkpoint saved.');}
+        if(event.type==='relay'){this.callbacks.onSystemsSave?.(this.systems.run);this.callbacks.onMessage?.(this.systems.run.relays.length<3?'Relay activated. Barrier released; progress saved.':'Third relay activated. Final terminal unlocked; progress saved.');}
         if(event.type==='drone-disabled'){this.callbacks.onSystemsSave?.(this.systems.run);this.callbacks.onMessage?.('Patrol drone disabled. Continue to the relays.');}
         if(event.type==='drone-hit')this.callbacks.onMessage?.('Drone hit: '+this.systems.run.droneHp+' energy cells left.');
         if(event.type==='warning')this.callbacks.onMessage?.('Drone locking on. Move, jump or use Q to dodge.');

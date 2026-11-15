@@ -1,7 +1,8 @@
+import {t} from '/scripts/lab/localization.js';
 import * as THREE from 'three';
 import {SceneObjects} from './objects.js';
 import {DECKS,BRIDGES,STATIONS,CARGO} from './gameplay.js';
-const P={hull:0x172c47,edge:0x365573,white:0xd9e8ee,dark:0x081322,cyan:0x66f1df,gold:0xffbf70,blue:0x7caeff};
+const P={hull:0x172c47,edge:0x365573,white:0xd9e8ee,dark:0x081322,cyan:0x80d9ef,gold:0xffbf70,blue:0xb5a8ff};
 export class OrbitalWorld extends SceneObjects {
   luminous(color,intensity=1.3) {const key='glow:'+color+':'+intensity;if(!this.materials.has(key))this.materials.set(key,new THREE.MeshStandardMaterial({color:0x102139,emissive:color,emissiveIntensity:intensity,roughness:.35,metalness:.2}));return this.materials.get(key);}
   ring(radius,tube,x,y,z,color,parent=this.scene) {
@@ -66,9 +67,9 @@ export class OrbitalWorld extends SceneObjects {
     const moon=new THREE.Mesh(new THREE.SphereGeometry(3.1,24,20),this.material(0x8698b5));moon.position.set(30,16,-75);this.scene.add(moon);
   }
   sign(title,subtitle,width,x,y,z) {
-    const c=document.createElement('canvas');c.width=1024;c.height=256;const ctx=c.getContext('2d');ctx.fillStyle='#0a192c';ctx.fillRect(0,0,1024,256);ctx.fillStyle='#63eadc';ctx.fillRect(0,0,8,256);ctx.font='500 65px Arial';ctx.fillStyle='#e1eeff';ctx.fillText(title,45,110);ctx.font='31px Arial';ctx.fillStyle='#8ca6c5';ctx.fillText(subtitle,48,180);
-    const texture=new THREE.CanvasTexture(c);texture.colorSpace=THREE.SRGBColorSpace;
-    const mesh=new THREE.Mesh(new THREE.PlaneGeometry(width,width/4),new THREE.MeshBasicMaterial({map:texture,side:THREE.DoubleSide,transparent:true,depthWrite:false}));mesh.position.set(x,y,z);mesh.userData.signWidth=width;(this.signs??=[]).push(mesh);this.scene.add(mesh);return mesh;
+    const c=document.createElement('canvas');c.width=1024;c.height=256;const ctx=c.getContext('2d');
+    const texture=this.textTexture(c,()=>{const light=document.documentElement.dataset.theme==='light';ctx.fillStyle=light?'#f7f8fc':'#141c32';ctx.fillRect(0,0,1024,256);ctx.fillStyle=light?'#4e49d8':'#b5a8ff';ctx.fillRect(0,0,8,256);ctx.font='600 65px Space';ctx.fillStyle=light?'#18223c':'#eff2fc';ctx.fillText(t(title),45,110,934);ctx.font='400 31px Inter';ctx.fillStyle=light?'#55627d':'#a9b5cf';ctx.fillText(t(subtitle),48,180,928)});
+    const mesh=new THREE.Mesh(new THREE.PlaneGeometry(width,width/4),new THREE.MeshBasicMaterial({map:texture,toneMapped:false,side:THREE.DoubleSide,transparent:true,depthWrite:false}));mesh.position.set(x,y,z);mesh.userData.signWidth=width;(this.signs??=[]).push(mesh);this.scene.add(mesh);return mesh;
   }
   core() {
     this.cylinder(1.1,1.35,.4,0,.2,0,P.edge);this.cylinder(.7,.85,1.5,0,1.1,0,P.hull);

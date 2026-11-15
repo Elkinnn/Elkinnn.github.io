@@ -16,7 +16,7 @@ export const STATIONS=[
  {id:'systems',number:'02',name:'Systems',point:{x:11,z:-5.4},anchor:{x:11,y:3,z:-7.2},url:'/work/hospital-platform/'},
  {id:'ai',number:'03',name:'Applied AI',point:{x:4,z:-13.6},anchor:{x:4,y:3.6,z:-16.4},url:'/work/traffic-monitor/'}
 ];
-export const CARGO=[{id:'signal-01',name:'Signal 01',point:{x:-3.6,z:5.3}},{id:'signal-02',name:'Signal 02',point:{x:5,z:3.2}},{id:'signal-03',name:'Signal 03',point:{x:2.8,z:-9.1}}];
+export const CARGO=[{id:'signal-01',name:'Golden signal 01',point:{x:-3.6,z:5.3}},{id:'signal-02',name:'Golden signal 02',point:{x:5,z:3.2}},{id:'signal-03',name:'Golden signal 03',point:{x:2.8,z:-9.1}}];
 export const NEXUS={id:'nexus',name:'Nexus',point:{x:0,z:3}};
 function segmentDistance(p,a,b) {
  const dx=b.x-a.x,dz=b.z-a.z,t=Math.max(0,Math.min(1,((p.x-a.x)*dx+(p.z-a.z)*dz)/(dx*dx+dz*dz)));

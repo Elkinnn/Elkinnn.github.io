@@ -8,7 +8,7 @@ await build({
   absWorkingDir:root,
   entryPoints:['scripts/lab/orbital.js'],
   outfile:'assets/lab/scene.js',
-  bundle:true,minify:true,format:'esm',target:'es2022',legalComments:'eof'
+  external:['/scripts/lab/localization.js'],bundle:true,minify:true,format:'esm',target:'es2022',legalComments:'eof'
 });
 const license=await readFile(new URL('../node_modules/three/LICENSE',import.meta.url),'utf8');
 await writeFile(new URL('../assets/lab/THREE-LICENSE.txt',import.meta.url),license);
